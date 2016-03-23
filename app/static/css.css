@@ -1,0 +1,35 @@
+body {
+    font-family : tahoma, sans-serif;
+    color : #333;  
+}
+a {
+    color : #47c;
+    text-decoration : none;
+}
+a:hover {
+    text-decoration : underline;
+}
+hr {
+    border-top : 1px solid #777;
+    border-bottom : 0;
+    border-right : 0;
+    border-left : 0;
+}
+.flash {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.emoji {
+    height: 1em;
+    width: 1em;
+    vertical-align: -0.1em;
+    margin : 0;
+    padding : 0;
+}
+.emoji:hover {
+    transform: scale(1.5);
+}
+.emoji:active {
+    transform: scale(1);
+}

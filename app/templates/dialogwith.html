@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<style type="text/css">
+    .message {
+        border : 1px solid white;
+    }
+    .message:hover {
+        transform : scale(1.05);
+        background : white;
+        border : 1px solid #aaa;
+    }
+</style>
+<script type="text/javascript">
+    var socket
+    var user = {{user.json()|tojson|safe}}
+    var dialog = {{dialog.json()|tojson|safe}}
+    window.onload = function(){
+        socket = io.connect('http://' + document.domain + ':' + location.port + '/dialog');
+        socket.on('connect', function() {
+            socket.emit('join', dialog);
+            document.getElementById('messages').innerHTML = "";
+            console.log('connect');
+        });
+        socket.on('messages', function(data) {
+            console.log(data);
+            for(var i in data)
+                printmsg(data[i])
+                document.getElementById('messagesScroll').scrollTop = document.getElementById('messagesScroll').scrollHeight;
+        });
+        document.getElementById('text').addEventListener("keydown", function (e) {
+            if (e.keyCode === 13) {
+                socket.emit('message',
+                    {'sender_id' : {{current_user.id}}
+                    ,'recipient_id' : {{user.id}}
+                    ,'text' : String(document.getElementById('text').value)
+                    ,'dialog_id' : dialog.id});
+                console.log(String(document.getElementById('text').value));
+                document.getElementById('text').value = "";
+            }
+        });
+    }
+    function printmsg(data){
+        document.getElementById('messages').innerHTML +=
+        `
+        <div class="message">
+            <a href="user/`+data.sender_id +` style="font-size : 20px">`+twemoji.parse(String.fromCodePoint(data.sender.emoji))+data.sender.username+`</a> :
+            <span style="padding-left : 2em; padding-right : 2em; font-size: 13px;">`+twemoji.parse(data.text)+`</span>
+            <div style="float : right; font-size: 10px; color : #aaa;">`+data.timestamp+`</div>
+        </div>
+        `
+    }
+</script>
+<div id="messagesScroll" style=" height : 500px; overflow-y : scroll;">
+    <div id="messages" style="width : 700px; text-align : left;"></div>
+</div>
+<br>
+<input id="text" size="80" placeholder="Enter your message here">
+<br>
+{% endblock %}
