@@ -18,7 +18,7 @@ def join(data):
     join_room(room)
     messages = Message.query.filter(Message.dialog_id == data['id'])
     messages = [m.json() for m in messages]
-    emit('messages', messages, broadcast=True, room=room)
+    emit('join', messages, broadcast=True, room=room)
     
 @socketio.on('message', namespace='/dialog')
 def join(data):
@@ -26,4 +26,4 @@ def join(data):
     message = Message(data['sender_id'], data['recipient_id'], data['text'])
     db.session.add(message)
     db.session.commit()
-    emit('messages', [message.json()], broadcast=True, room=room)
+    emit('message', {'message':message.json(),'sender_id':data['sender_id']}, broadcast=True, room=room)

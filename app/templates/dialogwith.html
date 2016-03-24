@@ -16,7 +16,7 @@
     var user = {{user.json()|tojson|safe}}
     var dialog = {{dialog.json()|tojson|safe}}
     var audio = document.createElement('audio');
-    audio.setAttribute('src', 'http://oringz.com/oringz-uploads/sounds-1049-knob.mp3'); 
+    audio.setAttribute('src', 'http://www.flashkit.com/imagesvr_ce/flashkit/soundfx/Interfaces/Pops/Hit_Mark-Metallic-9040/Hit_Mark-Metallic-9040_hifi.mp3'); 
     window.onload = function(){
         socket = io.connect('http://' + document.domain + ':' + location.port + '/dialog');
         socket.on('connect', function() {
@@ -24,11 +24,18 @@
             document.getElementById('messages').innerHTML = "";
             console.log('connect');
         });
-        socket.on('messages', function(data) {
+        socket.on('join', function(data) {
             console.log(data);
+            document.getElementById('messages').innerHTML = '';
             for(var i in data)
                 printmsg(data[i])
-            audio.play();
+            document.getElementById('messagesScroll').scrollTop = document.getElementById('messagesScroll').scrollHeight;
+        });
+        socket.on('message', function(data) {
+            console.log(data);
+            printmsg(data.message)
+            if(data.sender_id != {{current_user.id}})
+                audio.play();
             document.getElementById('messagesScroll').scrollTop = document.getElementById('messagesScroll').scrollHeight;
         });
         document.getElementById('text').addEventListener("keydown", function (e) {

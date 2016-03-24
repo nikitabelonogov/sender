@@ -73,6 +73,8 @@ def users():
 @app.route('/user/<int:userid>')
 @login_required
 def user(userid):
+    if current_user.id == userid:
+        return redirect('/')
     user = User.query.filter(User.id == userid).first()
     return render_template('user.html', title=user.username, user=user)
     
