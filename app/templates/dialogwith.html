@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
 <style type="text/css">
     .message {
         border : 1px solid white;
@@ -46,7 +47,7 @@
         document.getElementById('messages').innerHTML +=
         `
         <div class="message">
-            <a href="user/`+data.sender_id +` style="font-size : 20px">`+twemoji.parse(String.fromCodePoint(data.sender.emoji))+data.sender.username+`</a> :
+            <a href="../user/`+data.sender_id +`">`+twemoji.parse(String.fromCodePoint(data.sender.emoji))+data.sender.username+`</a> :
             <span style="padding-left : 2em; padding-right : 2em; font-size: 13px;">`+twemoji.parse(data.text)+`</span>
             <div style="float : right; font-size: 10px; color : #aaa;">`+data.timestamp+`</div>
         </div>
@@ -59,4 +60,5 @@
 <br>
 <input id="text" size="80" placeholder="Enter your message here">
 <br>
+
 {% endblock %}

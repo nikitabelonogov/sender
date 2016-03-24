@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>{{user.username}}<a href="../dialogwith/{{user.id}}">💬</a></h1>
+<div id="emoji"style="font-size : 60px"></div>
+
+<script type="text/javascript">
+    document.getElementById('emoji').innerHTML = twemoji.parse(String.fromCodePoint({{user.emoji}}));
+</script>
+{% endblock %}

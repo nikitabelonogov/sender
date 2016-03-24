@@ -70,12 +70,18 @@ def users():
     users = [u.json() for u in User.query.all()] 
     return render_template('users.html', title='Users', users=users)
 
+@app.route('/user/<int:userid>')
+@login_required
+def user(userid):
+    user = User.query.filter(User.id == userid).first()
+    return render_template('user.html', title=user.username, user=user)
+    
 def finddialogbetween(u1id, u2id):
     q1 = Dialog.query.filter(Dialog.user1_id == u1id).filter(Dialog.user2_id == u2id)
     q2 = Dialog.query.filter(Dialog.user1_id == u2id).filter(Dialog.user2_id == u1id)
     return q1.union(q2)
     
-@app.route('/dialogwith/<int:userid>', methods=['GET'])
+@app.route('/dialogwith/<int:userid>')
 @login_required
 def dialogwith(userid):
     user = User.query.filter(User.id == userid).first()
