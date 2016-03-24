@@ -14,6 +14,8 @@
     var socket
     var user = {{user.json()|tojson|safe}}
     var dialog = {{dialog.json()|tojson|safe}}
+    var audio = document.createElement('audio');
+    audio.setAttribute('src', 'http://oringz.com/oringz-uploads/sounds-1049-knob.mp3'); 
     window.onload = function(){
         socket = io.connect('http://' + document.domain + ':' + location.port + '/dialog');
         socket.on('connect', function() {
@@ -25,7 +27,8 @@
             console.log(data);
             for(var i in data)
                 printmsg(data[i])
-                document.getElementById('messagesScroll').scrollTop = document.getElementById('messagesScroll').scrollHeight;
+            audio.play();
+            document.getElementById('messagesScroll').scrollTop = document.getElementById('messagesScroll').scrollHeight;
         });
         document.getElementById('text').addEventListener("keydown", function (e) {
             if (e.keyCode === 13) {
@@ -38,7 +41,7 @@
                 document.getElementById('text').value = "";
             }
         });
-    }
+    };
     function printmsg(data){
         document.getElementById('messages').innerHTML +=
         `

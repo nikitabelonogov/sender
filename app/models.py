@@ -25,11 +25,13 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def dialogs(self):
+        q1 = Dialog.query.filter(Dialog.user1 == self)
+        q2 = Dialog.query.filter(Dialog.user2 == self)
+        return q1.union(q2)
+    
     def get_id(self):
         return self.id
-        
-    def __repr__(self):
-        return '%s' % self.username.encode("utf-8")
     
     def json(self):
         return {"id":self.id,"username":self.username,"emoji":self.emoji}
@@ -46,6 +48,9 @@ class Dialog(db.Model):
     def __init__(self, user1_id, user2_id):
         self.user1_id = user1_id
         self.user2_id = user2_id
+    
+    def lastmessage(self):
+        return Message.query.filter(Message.dialog == self).all()[-1]
     
     def json(self):
         return {"id":self.id,"user1_id":self.user1_id,"user2_id":self.user2_id}
@@ -68,9 +73,6 @@ class Message(db.Model):
         self.recipient_id = recipient_id
         self.text = text
         self.dialog_id = finddialogbetween(sender_id, recipient_id).first().id
-    
-    def __repr__(self):
-        return '%s' % self.text.encode("utf-8")
         
     def json(self):
         return {"sender_id":self.sender_id,"recipient_id":self.recipient_id,"text":self.text,"timestamp":str(self.timestamp),"sender":self.sender.json()}

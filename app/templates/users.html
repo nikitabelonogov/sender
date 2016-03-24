@@ -1,8 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% for user in users%}
-    <a href="/dialogwith/{{user.id}}">{{user.username}}</a><br>
-{% endfor %}
+<div id="users">
+</div>
+
+<script type="text/javascript">
+    var users = {{users|tojson|safe}};
+    window.onload = function(){
+        for (var i in users){
+            document.getElementById("users").innerHTML += 
+            `
+            <div>
+            <a href="/dialogwith/`+users[i].id+`">`
+            +twemoji.parse(String.fromCodePoint(users[i].emoji))+users[i].username+`
+            </a>
+            </div>
+            `;
+        }
+    };
+</script>
 
 {% endblock %}

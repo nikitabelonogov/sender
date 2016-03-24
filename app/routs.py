@@ -46,7 +46,7 @@ def signup():
         flash('Hello, %s.' % current_user.username)
         flash('Nice to meet you.')
         return redirect('/')
-    return render_template('signup.html', title='Sing Up', form=form)    
+    return render_template('signup.html', title='Sign Up', form=form)    
     
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
@@ -62,25 +62,13 @@ def signin():
             return redirect('/')
         else:
             flash('Wrong username or password.')
-    return render_template('signin.html', title='Sing In', form=form)
+    return render_template('signin.html', title='Sign In', form=form)
 
 @app.route('/users')
 @login_required
 def users():
-    return render_template('users.html', title='Users', users=User.query.all())
-    
-@app.route('/messages/<int:userid>', methods=['GET'])
-@login_required
-def messageswith(userid):
-    user = User.query.filter(User.id == userid).first()
-    if not user:
-        flash('There is no user with id == ' + str(userid))
-        return redirect('/users')
-    outmessages = Message.query.filter(Message.sender == current_user).filter(Message.recipient ==         user)
-    inmessages  = Message.query.filter(Message.sender ==         user).filter(Message.recipient == current_user)
-    messages    = inmessages.union(outmessages).order_by(Message.timestamp)
-    messages = [m.json() for m in messages]
-    return render_template('messageswith.html', title=user.username, user=user, messages=messages)
+    users = [u.json() for u in User.query.all()] 
+    return render_template('users.html', title='Users', users=users)
 
 def finddialogbetween(u1id, u2id):
     q1 = Dialog.query.filter(Dialog.user1_id == u1id).filter(Dialog.user2_id == u2id)
@@ -102,6 +90,14 @@ def dialogwith(userid):
         db.session.add(dialog)
         db.session.commit()
     return render_template('dialogwith.html', title=user.username, user=user, dialog=dialog)
+
+@app.route('/dialogs')
+@login_required
+def dialogs():
+    dialogs = current_user.dialogs()
+    dialogs = [d.__dict__  for d in dialogs]
+    print dialogs
+    return render_template('dialogs.html', title="Ur dialogs", dialogs=dialogs)
 
 @app.route('/logout')
 @login_required
