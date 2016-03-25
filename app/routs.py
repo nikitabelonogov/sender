@@ -6,6 +6,7 @@ from flask.ext.socketio import SocketIO, emit
 from app import app, login_manager, db, socketio
 from models import User, Message, Dialog
 import forms
+from support import *
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -102,8 +103,8 @@ def dialogwith(userid):
 @app.route('/dialogs')
 @login_required
 def dialogs():
-    dialogs = current_user.dialogs()
-    dialogs = [d.__dict__  for d in dialogs]
+    dialogs = finddialogof(current_user)
+    dialogs = [d.json() for d in dialogs]
     print dialogs
     return render_template('dialogs.html', title="Ur dialogs", dialogs=dialogs)
 

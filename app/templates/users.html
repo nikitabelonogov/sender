@@ -8,14 +8,7 @@
     var users = {{users|tojson|safe}};
     window.onload = function(){
         for (var i in users){
-            document.getElementById("users").innerHTML += 
-            `
-            <div>
-            <a href="/user/`+users[i].id+`">`
-            +twemoji.parse(String.fromCodePoint(users[i].emoji))+users[i].username+`
-            </a>
-            </div>
-            `;
+            document.getElementById("users").appendChild(userlink(users[i]));
         }
     };
 </script>

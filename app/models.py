@@ -2,7 +2,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 
 from app import db
-
 def finddialogbetween(u1id, u2id):
     q1 = Dialog.query.filter(Dialog.user1_id == u1id).filter(Dialog.user2_id == u2id)
     q2 = Dialog.query.filter(Dialog.user1_id == u2id).filter(Dialog.user2_id == u1id)
@@ -24,11 +23,6 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
-
-    def dialogs(self):
-        q1 = Dialog.query.filter(Dialog.user1 == self)
-        q2 = Dialog.query.filter(Dialog.user2 == self)
-        return q1.union(q2)
     
     def get_id(self):
         return self.id
@@ -49,11 +43,8 @@ class Dialog(db.Model):
         self.user1_id = user1_id
         self.user2_id = user2_id
     
-    def lastmessage(self):
-        return Message.query.filter(Message.dialog == self).all()[-1]
-    
     def json(self):
-        return {"id":self.id,"user1_id":self.user1_id,"user2_id":self.user2_id}
+        return {"id":self.id,"user1":self.user1.json(),"user2":self.user2.json()}
 
 class Message(db.Model):
     __tablename__ = 'mails'

@@ -33,3 +33,22 @@ hr {
 .emoji:active {
     transform: scale(1);
 }
+.userlink:hover * {
+    transform: scale(1.5);
+}
+.timestamp {
+    float : right;
+    font-size: 10px;
+    color : #aaa;
+}
+.message {
+    border : 1px solid white;
+}
+.message:hover {
+    background : white;
+    border : 1px solid #aaa;
+}
+.messagetext {
+    padding-left: 2em;
+    padding-right: 2em;
+}

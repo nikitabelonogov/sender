@@ -1,16 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 
-<style type="text/css">
-    .message {
-        border : 1px solid white;
-    }
-    .message:hover {
-        transform : scale(1.05);
-        background : white;
-        border : 1px solid #aaa;
-    }
-</style>
+<div id="messagesScroll" style=" height : 500px; overflow-y : scroll;">
+    <div id="messages" style="width : 700px; text-align : left;"></div>
+</div>
+<br>
+<input id="text" size="80" placeholder="Enter your message here">
+<br>
+
 <script type="text/javascript">
     var socket
     var user = {{user.json()|tojson|safe}}
@@ -51,21 +48,8 @@
         });
     };
     function printmsg(data){
-        document.getElementById('messages').innerHTML +=
-        `
-        <div class="message">
-            <a href="../user/`+data.sender_id +`">`+twemoji.parse(String.fromCodePoint(data.sender.emoji))+data.sender.username+`</a> :
-            <span style="padding-left : 2em; padding-right : 2em; font-size: 13px;">`+twemoji.parse(data.text)+`</span>
-            <div style="float : right; font-size: 10px; color : #aaa;">`+data.timestamp+`</div>
-        </div>
-        `
+        document.getElementById('messages').appendChild(printmessage(data));
     }
 </script>
-<div id="messagesScroll" style=" height : 500px; overflow-y : scroll;">
-    <div id="messages" style="width : 700px; text-align : left;"></div>
-</div>
-<br>
-<input id="text" size="80" placeholder="Enter your message here">
-<br>
 
 {% endblock %}
