@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="width : 600">
+    <h1>{{title}}</h1>
+    <hr>
+    <form action="" method="post" name="{{title}}">
+        <p>
+            recipient : {{form.recipient}}
+            {% for error in form.errors.recipient %}
+            <br>
+            <span style="color: red;">{{error}}</span>
+            {% endfor %}
+        </p>
+        <p>
+            subject : {{form.subject}}
+        </p>
+        <p>
+            body : {{form.body}}
+        </p>
+        <p><input type="submit" value="Send"></p>
+    </form>
+</div>
+
+{% endblock %}

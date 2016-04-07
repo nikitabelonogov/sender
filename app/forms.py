@@ -29,3 +29,11 @@ class SignInForm(Form):
         
 class SendMessageForm(Form):
     text = TextAreaField('text')
+    
+class EmailSendForm(Form):
+    recipient = TextField('recipient', [validators.Email])
+    subject   = TextField('subject')
+    body      = TextAreaField('body')
+    
+    def validate(self):
+        return Form.validate(self)

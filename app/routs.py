@@ -114,3 +114,31 @@ def logout():
     logout_user()
     flash("Goodbye come again.")
     return redirect('/')
+    
+@app.route('/email', methods=['GET'])
+@login_required
+def emailget():
+    form = forms.EmailSendForm()
+    return render_template('email.html', title='Send email', form=form)
+    
+@app.route('/email', methods=['POST'])
+@login_required
+def emailpost():
+    form = forms.EmailSendForm(request.form)
+    
+    import sendgrid
+
+    client = sendgrid.SendGridClient("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")
+    message = sendgrid.Mail()
+    
+    print(form.recipient.data)
+    
+    message.add_to(form.recipient.data)
+    message.set_from(current_user.username + "@youremail.com")
+    message.set_subject(form.subject.data)
+    message.set_html(form.body.data)
+    
+    print(client.send(message))
+    return redirect('/email')
+    
+    
